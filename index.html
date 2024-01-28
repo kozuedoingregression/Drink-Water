@@ -83,6 +83,10 @@
                 icon: 'water_icon.png' // Add your own water icon image
             };
 
+            // Display the first notification immediately
+            new Notification('Water Reminder', notificationOptions);
+
+            // Schedule subsequent notifications
             setInterval(() => {
                 if (notificationEnabled) {
                     new Notification('Water Reminder', notificationOptions);
