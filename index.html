@@ -19,7 +19,6 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
-
         }
 
         .container {
@@ -70,30 +69,38 @@
         }
 
         function requestNotificationPermission() {
-            Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                    scheduleNotification();
-                }
-            });
+            if (!("Notification" in window)) {
+                alert("This browser does not support desktop notifications");
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then((permission) => {
+                    if (permission === 'granted') {
+                        scheduleNotification();
+                    }
+                });
+            }
         }
 
         function scheduleNotification() {
+            // Display the first notification immediately
+            showDesktopNotification();
+
+            // Schedule subsequent notifications
+            setInterval(() => {
+                if (notificationEnabled) {
+                    showDesktopNotification();
+                    waterCount += 1;
+                    document.getElementById('waterCount').textContent = waterCount;
+                }
+            }, 30 * 60 * 1000); // 30 minutes in milliseconds
+        }
+
+        function showDesktopNotification() {
             const notificationOptions = {
                 body: 'It\'s time to drink water!',
                 icon: 'water_icon.png' // Add your own water icon image
             };
 
-            // Display the first notification immediately
             new Notification('Water Reminder', notificationOptions);
-
-            // Schedule subsequent notifications
-            setInterval(() => {
-                if (notificationEnabled) {
-                    new Notification('Water Reminder', notificationOptions);
-                    waterCount += 1;
-                    document.getElementById('waterCount').textContent = waterCount;
-                }
-            }, 30 * 60 * 1000); // 30 minutes in milliseconds
         }
     </script>
 </body>
