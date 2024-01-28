@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Reminder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #status {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stay Hydrated!</h1>
+        <button onclick="toggleNotifications()">Toggle Notifications</button>
+        <p id="status"></p>
+        <p>Water count: <span id="waterCount">0</span></p>
+    </div>
+
+    <script>
+        let notificationEnabled = false;
+        let waterCount = 0;
+
+        function toggleNotifications() {
+            notificationEnabled = !notificationEnabled;
+
+            if (notificationEnabled) {
+                requestNotificationPermission();
+                document.getElementById('status').textContent = 'Working';
+            } else {
+                document.getElementById('status').textContent = 'Not Working';
+            }
+        }
+
+        function requestNotificationPermission() {
+            Notification.requestPermission().then((permission) => {
+                if (permission === 'granted') {
+                    scheduleNotification();
+                }
+            });
+        }
+
+        function scheduleNotification() {
+            const notificationOptions = {
+                body: 'It\'s time to drink water!',
+                icon: 'water_icon.png' // Add your own water icon image
+            };
+
+            setInterval(() => {
+                if (notificationEnabled) {
+                    new Notification('Water Reminder', notificationOptions);
+                    waterCount += 1;
+                    document.getElementById('waterCount').textContent = waterCount;
+                }
+            }, 30 * 60 * 1000); // 30 minutes in milliseconds
+        }
+    </script>
+</body>
+</html>
