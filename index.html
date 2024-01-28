@@ -1,17 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Reminder</title>
+    <link rel="icon" type="image/png" href="drop.png">
     <style>
         body {
             font-family: Arial, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: #1a1a1a;
+            color: #dddddd;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 2vw;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
+
         }
 
         .container {
@@ -20,8 +28,16 @@
 
         button {
             padding: 10px;
-            font-size: 16px;
+            font-size: 2vw;
             cursor: pointer;
+            background-color: #1a1a1a;
+            color: #dddddd;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #0000001a;
+            color: white;
         }
 
         #status {
@@ -29,6 +45,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Stay Hydrated!</h1>
@@ -76,4 +93,5 @@
         }
     </script>
 </body>
+
 </html>
