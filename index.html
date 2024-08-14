@@ -19,6 +19,11 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
+            background-image: url("output-onlinepngtools\(3\).png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center; 
+            background-size: 20%;
         }
 
         .container {
@@ -29,7 +34,7 @@
             padding: 10px;
             font-size: 2vw;
             cursor: pointer;
-            background-color: #1a1a1a;
+            background-color: #0000001a;
             color: #dddddd;
             border: none;
         }
@@ -42,12 +47,13 @@
         #status {
             margin-top: 20px;
         }
+        
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Stay Hydrated!</h1>
+        <h1 class="hydrate">Stay Hydrated!</h1>
         <button onclick="toggleNotifications()">Toggle Notifications</button>
         <p id="status"></p>
         <p>Water count: <span id="waterCount">0</span></p>
@@ -62,7 +68,7 @@
 
             if (notificationEnabled) {
                 requestNotificationPermission();
-                document.getElementById('status').textContent = 'Working';
+                document.getElementById('status').textContent = 'Working! water break every 30min';
             } else {
                 document.getElementById('status').textContent = 'Not Working';
             }
