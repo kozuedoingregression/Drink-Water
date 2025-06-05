@@ -6,71 +6,386 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Reminder</title>
     <link rel="icon" type="image/png" href="drop.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            --text-color: #ffffff;
+            --accent-color: #4fc3f7;
+            --container-bg: rgba(255, 255, 255, 0.1);
+            --button-bg: #4fc3f7;
+            --button-hover: #81d4fa;
+        }
+
+        [data-theme="light"] {
+            --bg-gradient: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+            --text-color: #1a1a1a;
+            --accent-color: #0288d1;
+            --container-bg: rgba(0, 0, 0, 0.05);
+            --button-bg: #0288d1;
+            --button-hover: #039be5;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #1a1a1a;
-            color: #dddddd;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 2vw;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            font-size: 1.2rem;
             height: 100vh;
             margin: 0;
             overflow: hidden;
-            background-image: url("output-onlinepngtools\(3\).png");
+            transition: all 0.3s ease;
+            background-image: url('anime.png');
+            background-size: cover;
+            background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-position: center; 
-            background-size: 20%;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-gradient);
+            opacity: 0.85;
+            z-index: 0;
         }
 
         .container {
             text-align: center;
+            background: var(--container-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--container-bg);
+            transform: rotate(30deg);
+        }
+
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
         }
 
         button {
-            padding: 10px;
-            font-size: 2vw;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
             cursor: pointer;
-            background-color: #0000001a;
-            color: #dddddd;
+            background: var(--button-bg);
+            color: #ffffff;
             border: none;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         button:hover {
-            background-color: #0000001a;
-            color: white;
+            background: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        .progress-container {
+            width: 100%;
+            background: var(--container-bg);
+            border-radius: 1rem;
+            margin: 1rem 0;
+            padding: 0.5rem;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 1.5rem;
+            background: var(--accent-color);
+            border-radius: 0.8rem;
+            transition: width 0.3s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 1.5rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .settings {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--container-bg);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .setting-group {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--container-bg);
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.8rem;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .setting-group label {
+            font-weight: 600;
+            color: var(--accent-color);
+            min-width: 120px;
+            text-align: left;
+        }
+
+        select {
+            padding: 0.8rem 1.2rem;
+            border-radius: 0.5rem;
+            background: var(--container-bg);
+            color: var(--text-color);
+            border: 1px solid var(--accent-color);
+            margin-left: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.7rem center;
+            background-size: 1em;
+            padding-right: 2.5rem;
+        }
+
+        select option {
+            background: var(--container-bg);
+            color: var(--text-color);
+            padding: 0.5rem;
+        }
+
+        select:hover {
+            border-color: var(--button-hover);
+            transform: translateY(-1px);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px var(--accent-color);
         }
 
         #status {
-            margin-top: 20px;
+            margin-top: 1rem;
+            color: var(--accent-color);
         }
-        
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: var(--container-bg);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            font-size: 0.9rem;
+            z-index: 1;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .footer-text {
+            color: var(--text-color);
+            opacity: 0.8;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1 class="hydrate">Stay Hydrated!</h1>
-        <button onclick="toggleNotifications()">Toggle Notifications</button>
+        <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+        <h1>Stay Hydrated!</h1>
+        <div class="controls">
+            <button onclick="toggleNotifications()">Toggle Notifications</button>
+            <button onclick="resetCount()">Reset Count</button>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="waterCount">0</div>
+                <div>Glasses Today</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="goal">8</div>
+                <div>Daily Goal</div>
+            </div>
+        </div>
+        <div class="settings">
+            <div class="setting-group">
+                <label for="interval">Reminder Interval:</label>
+                <select id="interval" onchange="updateInterval()">
+                    <option value="15">15 minutes</option>
+                    <option value="30" selected>30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">1 hour</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label for="goalSelect">Daily Goal:</label>
+                <select id="goalSelect" onchange="updateGoal()">
+                    <option value="6">6 glasses</option>
+                    <option value="8" selected>8 glasses</option>
+                    <option value="10">10 glasses</option>
+                    <option value="12">12 glasses</option>
+                </select>
+            </div>
+        </div>
         <p id="status"></p>
-        <p>Water count: <span id="waterCount">0</span></p>
     </div>
+
+    <footer class="footer">
+        <div class="social-links">
+            <a href="https://x.com/0xaa248" target="_blank">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                @0xaa248
+            </a>
+        </div>
+        <div class="footer-text">
+            Made with 💧 by Kozue | Stay Hydrated!
+        </div>
+    </footer>
 
     <script>
         let notificationEnabled = false;
         let waterCount = 0;
+        let notificationInterval = 30 * 60 * 1000; // 30 minutes in milliseconds
+        let dailyGoal = 8;
+        let notificationTimer = null;
+
+        // Theme management
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+        }
+
+        // Load saved data from localStorage
+        function loadSavedData() {
+            const savedCount = localStorage.getItem('waterCount');
+            const savedGoal = localStorage.getItem('dailyGoal');
+            const savedInterval = localStorage.getItem('notificationInterval');
+            
+            if (savedCount) waterCount = parseInt(savedCount);
+            if (savedGoal) {
+                dailyGoal = parseInt(savedGoal);
+                document.getElementById('goalSelect').value = savedGoal;
+            }
+            if (savedInterval) {
+                notificationInterval = parseInt(savedInterval);
+                document.getElementById('interval').value = savedInterval / (60 * 1000);
+            }
+            
+            updateDisplay();
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('waterCount', waterCount);
+            localStorage.setItem('dailyGoal', dailyGoal);
+            localStorage.setItem('notificationInterval', notificationInterval);
+        }
+
+        function updateDisplay() {
+            document.getElementById('waterCount').textContent = waterCount;
+            document.getElementById('goal').textContent = dailyGoal;
+            const progress = (waterCount / dailyGoal) * 100;
+            document.getElementById('progressBar').style.width = `${Math.min(progress, 100)}%`;
+        }
 
         function toggleNotifications() {
             notificationEnabled = !notificationEnabled;
 
             if (notificationEnabled) {
                 requestNotificationPermission();
-                document.getElementById('status').textContent = 'Working! water break every 30min';
+                document.getElementById('status').textContent = 'Notifications enabled!';
             } else {
-                document.getElementById('status').textContent = 'Not Working';
+                document.getElementById('status').textContent = 'Notifications disabled';
+                if (notificationTimer) {
+                    clearInterval(notificationTimer);
+                    notificationTimer = null;
+                }
             }
         }
 
@@ -87,27 +402,58 @@
         }
 
         function scheduleNotification() {
-            // Display the first notification immediately
+            if (notificationTimer) {
+                clearInterval(notificationTimer);
+            }
+            
             showDesktopNotification();
-
-            // Schedule subsequent notifications
-            setInterval(() => {
+            notificationTimer = setInterval(() => {
                 if (notificationEnabled) {
                     showDesktopNotification();
-                    waterCount += 1;
-                    document.getElementById('waterCount').textContent = waterCount;
+                    incrementWaterCount();
                 }
-            }, 30 * 60 * 1000); // 30 minutes in milliseconds
+            }, notificationInterval);
         }
 
         function showDesktopNotification() {
             const notificationOptions = {
-                body: 'It\'s time to drink water!',
-                icon: 'water_icon.png' // Add your own water icon image
+                body: 'Time to stay hydrated! 💧',
+                icon: 'drop.png'
             };
 
             new Notification('Water Reminder', notificationOptions);
         }
+
+        function incrementWaterCount() {
+            waterCount++;
+            updateDisplay();
+            saveData();
+        }
+
+        function resetCount() {
+            waterCount = 0;
+            updateDisplay();
+            saveData();
+        }
+
+        function updateInterval() {
+            const minutes = parseInt(document.getElementById('interval').value);
+            notificationInterval = minutes * 60 * 1000;
+            if (notificationEnabled) {
+                scheduleNotification();
+            }
+            saveData();
+        }
+
+        function updateGoal() {
+            dailyGoal = parseInt(document.getElementById('goalSelect').value);
+            updateDisplay();
+            saveData();
+        }
+
+        // Initialize the app
+        loadTheme();
+        loadSavedData();
     </script>
 </body>
 
